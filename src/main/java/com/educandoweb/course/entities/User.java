@@ -2,22 +2,16 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 
-// É sempre bom a classe depender da especificação (javx.persistence0), e não da implementação (org.hibernate). Nesse caso do JPA
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-// São feitas Annotations do JPA para instruir o JPA como que ele converterá os objetos para o modelo relacional
-
 @Entity
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	// Chave primária da tabela do banco de dados (H2 - banco de dados em memória
 	@Id
-	// Como esse Chave é uma Chave numérica, ela será autoincrementável no banco de dados
-	// Dependendo do banco de dados usado a expressão dentro do "()" terá que mudar. Mas para os principais como MySQL, H2, etc irá funcionar
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
