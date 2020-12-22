@@ -1,13 +1,18 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "tb_user")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -18,6 +23,14 @@ public class User implements Serializable {
 	private String email;
 	private String phone;
 	private String password;
+	
+	// -- Diagrama UML "Um (User) para muitos (Order)" -- //
+	// Mapear o relacionamento entre o objeto "client" da classe "Order" com o obejto "orders" da classe "User"
+	// Para assim o JPA transformar esse relacionamento em chaves estrangeiras no banco de dados
+	// - (mappedBy = "client"): nome do atributo que tem lá do outro lado da associação
+	@OneToMany(mappedBy = "client")
+	// Lista de pedidos dos Users
+	private List<Order> orders = new ArrayList<>();
 	
 	public User() {
 	}
@@ -71,6 +84,13 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	// Em uma coleção implementa-se somente o - get(): nesse caso para acrescentar e remover elementos 
+	// E não trocar essa lista por outra - set()
+	public List<Order> getOrders() {
+		return orders;
+	}
+		
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -95,5 +115,5 @@ public class User implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 }
