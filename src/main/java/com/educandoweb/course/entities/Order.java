@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 //São feitas Annotations do JPA para instruir o JPA como que ele converterá os objetos para o modelo relacional
 // Annotations do JPA para instruir ao JPA que essa classe "Order" será uma tabela do banco de dados 
 // - @Entity
@@ -31,6 +33,8 @@ public class Order implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	// Para garantir que o objeto "moment" seja mostrado no JSON no formato de String ISO 8601 acrescenta-se uma Annotation para formatar o JSON
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	// Antigamente antes da Java 8 se usava o tipo "Date"
 	// A partir do Java 8 deu-se proferência ao tipo "Instant" por ser melhor que o tipo "Date"
 	private Instant moment;

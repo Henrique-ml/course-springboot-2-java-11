@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tb_user")
 public class User implements Serializable {
@@ -24,7 +26,33 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 	
-	// -- Diagrama UML "Um (User) para muitos (Order)" -- //
+	// ------ LAZY LOADING ------ //
+
+	// O Lazy Loading é necessário para não estourar a memória da sua máquina causado pela associação de mão-dupla
+
+	// Associação de mão-dupla: onde objetos associados ficam chamando um ao outro em um loop infinito...
+	// ...Nesse caso, o objeto "client" tem "orders" e esse objetos "orders" tem um objeto "client"... e por assim vai
+
+	// - @JsonIgnore: para cancelar esse loop infinito causado pela associação de mão-dupla (é uma Annotation do Jackson e não do JPA)
+
+	// Ao carregar/consultar um objeto automaticamente o JPA também carregará o objeto associado à ele...
+	// ...Nesse caso ao carregar/consultar um objeto "Order" o JPA carregará o objeto "User" associado à ele
+	
+	// A biblioteca que faz a Serialização do JSON é o Jackson, e ele pode lançar um erro pois...
+	// ...pode haver uma associação de mão-dupla entre objetos que estão associados. Nesse caso, os objetos "client" da classe "Order" com o objeto "orders" da classe "User"
+	// O Jackson que faz o pedido ao banco de dados e aí sim o JPA busca esses dados
+	
+	// Na arquivo src/main/sources > application.properties
+	// - spring.jpa.open-in-view=true: permite que o Jackson, na hora de Serializar o JSON, acione o JPA para trazer dados do banco de dados...
+	// ...Nesse caso, quando o obbjeto "orders" for chamado, carregar dados do objeto "client" associado à ele
+	
+	// Quando se tem uma associação "Muitos para um" se ao carregar um objeto do lado do "Muitos" o objeto do lado do "Um" é carregado pelo JPA automaticamente
+	// Agora, caso carregar o objeto do lado do "Um" o JPA não carregará também o objeto do lado "Muitos" por padrão...
+	// ...a menos que você coloque a Annotation "@JsonIgnore" no lado do "Muitos"
+	// Colocar essa Annotation em pelo menos em um dos dois objetos que estão associados
+	@JsonIgnore
+	
+	// --- Diagrama UML "Um (User) para muitos (Order)" -- //
 	// Mapear o relacionamento entre o objeto "client" da classe "Order" com o obejto "orders" da classe "User"
 	// Para assim o JPA transformar esse relacionamento em chaves estrangeiras no banco de dados
 	// - (mappedBy = "client"): nome do atributo que tem lá do outro lado da associação
