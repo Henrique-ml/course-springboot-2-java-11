@@ -26,10 +26,6 @@ public class Order implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
 	
-	// Novo atributo da classe "orderStatus"
-	// O tipo "Integer" demonstra explicitamente que se está gravando no banco de dados um int...
-	// ...Porém esse modo de demonstração terá somente internamente dessa classe...
-	// ...fora dessa classe será mantido o tipo "OrderStatus" 
 	private Integer orderStatus;
 	
 	@ManyToOne
@@ -39,7 +35,6 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	// Novo atributo no construtor
 	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
@@ -64,8 +59,6 @@ public class Order implements Serializable {
 		this.moment = moment;
 	}
 	
-	// --- GET/SET do novo atributo "orderStatus" --- //
-	
 	public OrderStatus getOrderStatus() {
 		return OrderStatus.valueOf(orderStatus);
 	}
@@ -76,8 +69,6 @@ public class Order implements Serializable {
 		}
 	}
 	
-	// ------------- //	
-
 	public User getClient() {
 		return client;
 	}
