@@ -11,50 +11,40 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-//São feitas Annotations do JPA para instruir o JPA como que ele converterá os objetos para o modelo relacional
-// Annotations do JPA para instruir ao JPA que essa classe "Order" será uma tabela do banco de dados 
-// - @Entity
-// - @Id
-// - @GeneratedValue
-
 @Entity
-
-// Colou-se essa Annotation pois "Order" é uma palavra reservada do SQL
 @Table(name = "tb_order")
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	// Chave primária da tabela do banco de dados (H2 - banco de dados em memória)	
 	@Id	
-	// Como esse Chave é uma Chave numérica, ela será autoincrementável no banco de dados	
-	// Dependendo do banco de dados usado a expressão dentro do "()" terá que mudar. Mas para os principais como MySQL, H2, etc irá funcionar	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	// Para garantir que o objeto "moment" seja mostrado no JSON no formato de String ISO 8601 acrescenta-se uma Annotation para formatar o JSON
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-	// Antigamente antes da Java 8 se usava o tipo "Date"
-	// A partir do Java 8 deu-se proferência ao tipo "Instant" por ser melhor que o tipo "Date"
 	private Instant moment;
 	
-	//  -- Diagrama UML "Muitos (Order) para um (User)" -- //
-	// Mapear o relacionamento entre o objeto "client" da classe "Order" com o obejto "orders" da classe "User"
-	// Para assim o JPA transformar esse relacionamento em chaves estrangeiras no banco de dados
-	@ManyToOne
+	// Novo atributo da classe "orderStatus"
+	// O tipo "Integer" demonstra explicitamente que se está gravando no banco de dados um int...
+	// ...Porém esse modo de demonstração terá somente internamente dessa classe...
+	// ...fora dessa classe será mantido o tipo "OrderStatus" 
+	private Integer orderStatus;
 	
-	// - (name = "client_id"): nome da chave estrangeira que terá lá no banco de dados
+	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
 	
 	public Order() {
 	}
 
-	public Order(Long id, Instant moment, User client) {
+	// Novo atributo no construtor
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
+		setOrderStatus(orderStatus);
 		this.client = client;
 	}
 
@@ -73,6 +63,20 @@ public class Order implements Serializable {
 	public void setMoment(Instant moment) {
 		this.moment = moment;
 	}
+	
+	// --- GET/SET do novo atributo "orderStatus" --- //
+	
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();
+		}
+	}
+	
+	// ------------- //	
 
 	public User getClient() {
 		return client;
@@ -91,7 +95,6 @@ public class Order implements Serializable {
 	}
 
 	@Override
-	// Comparar um objeto com outro somente por Id
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
