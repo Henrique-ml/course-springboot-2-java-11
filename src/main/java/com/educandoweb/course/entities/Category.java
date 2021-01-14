@@ -8,8 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_category")
@@ -21,16 +23,10 @@ public class Category implements Serializable {
 	private Long id;
 	private String name;
 	
-	// Associação com a classe Product
-	
-	// Como ainda faltam coisas (provisório) o JPA não está reconhecendo a coleção Set, implementar essa Annotation
-	// - @Transient: impedir que o JPA tente interpretar isso
-	@Transient
-	
-	// Não será feito com List
-	// Será feito com Set, que representa um conjunto e garante que não terá um Product com mais de uma ocorrência da mesma categoria...
-	// ...ou seja, o MESMO produto não pode ter a MESMA Category MAIS DE UMA VEZ
-	// - new HashSet<>(): garantir que a coleção comece VAZIA e INSTANCIADA e não NULA
+	@JsonIgnore
+	// Referência ao Mapeamento feito nessa aula na classe "Product"
+	// - mappedBy = : nome da coleção associada que tem la na classe "Product"
+	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 	
 	public Category() {
@@ -62,8 +58,6 @@ public class Category implements Serializable {
 		return products;
 	}
 	
-	// Não se cria um método SET para coleções para elas não serem substituidas por uma outra nova coleção
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

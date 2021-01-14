@@ -8,10 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-// Mapeamento objeto relacional do JPA
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable {
@@ -25,18 +26,14 @@ public class Product implements Serializable {
 	private Double price;
 	private String imgUrl;
 	
-	// Ainda não se fez associação com a classe Order pois ainda não existe a classe OrderItem
+	// Mapeamento para transformar as coleções "categories" e "products" que estão associadas nas classes "Product" e "Category"...
+	// ...em uma tabela de associação no Modelo Relacional, para isso faça:
 	
-	// Associação com a classe Category
-	
-	// Como ainda faltam coisas (provisório) o JPA não está reconhecendo a coleção Set, implementar essa Annotation
-	// - @Transient: impedir que o JPA tente interpretar isso
-	@Transient
-	
-	// Não será feito com List
-	// Será feito com Set, que representa um conjunto e garante que não terá um Product com mais de uma ocorrência da mesma categoria...
-	// ...ou seja, o MESMO produto não pode ter a MESMA Category MAIS DE UMA VEZ
-	// - new HashSet<>(): garantir que a coleção comece VAZIA e INSTANCIADA e não NULA
+	@ManyToMany
+	// - name = : nome da table e quais vão ser as chaves estrangeiras que irá associar a tabela de Product com a tabela de Category
+	// - joinColumns = : nome da chave estrangeira referente a tabela de Product
+	// - inverseJoinColumns = : definir qual é a chave estrangeira da outra entidade
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
 	
 	public Product() {
@@ -49,8 +46,6 @@ public class Product implements Serializable {
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
-		
-		// Não se coloca coleções em um construtor pois já está se instanciando uma. Nesse caso a coleção "categories"
 	}
 	
 	public Long getId() {
