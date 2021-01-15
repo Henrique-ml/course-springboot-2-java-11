@@ -26,13 +26,7 @@ public class Product implements Serializable {
 	private Double price;
 	private String imgUrl;
 	
-	// Mapeamento para transformar as coleções "categories" e "products" que estão associadas nas classes "Product" e "Category"...
-	// ...em uma tabela de associação no Modelo Relacional, para isso faça:
-	
 	@ManyToMany
-	// - name = : nome da table e quais vão ser as chaves estrangeiras que irá associar a tabela de Product com a tabela de Category
-	// - joinColumns = : nome da chave estrangeira referente a tabela de Product
-	// - inverseJoinColumns = : definir qual é a chave estrangeira da outra entidade
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
 	

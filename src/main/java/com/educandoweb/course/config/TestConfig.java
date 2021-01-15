@@ -50,10 +50,6 @@ public class TestConfig implements CommandLineRunner {
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		
-		// Operações de associar os objetos do tipo "Product" aos objetos do tipo  "Category" e inclui-las ao banco de dados que eles estão associados...
-		// ...devem ser feitas DEPOIS desses objetos já estarem salvos no banco de dados sem ainda estarem associados
-		
-		// Associando (adicionando objetos tipo "Category" na coleção Set "categories" da classe "Products") os objetos do tipo "Products" com os objetos do tipo "Categories"
 		p1.getCategories().add(cat2);
 		p2.getCategories().add(cat1);
 		p2.getCategories().add(cat3);
@@ -61,7 +57,6 @@ public class TestConfig implements CommandLineRunner {
 		p4.getCategories().add(cat3);
 		p5.getCategories().add(cat2);
 		
-		// Salvar novamente os objetos do tipo "Product" com as assocoções (adições) feitas
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		
 		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
