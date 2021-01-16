@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.educandoweb.course.entities.pk.OrderItemPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 // Mapemanto JPA
 @Entity
@@ -17,7 +18,10 @@ public class OrderItem implements Serializable {
 	// Atributo identificador - que é o correspondente da chave-primária composta
 	// Não colocar a Annotation @Id, por ser um id composto. Então nesse caso coloca-se a Annotation @EmbeddedId
 	@EmbeddedId
-	private OrderItemPK id;
+	
+	// Esse atributo "id" vai ter uma associação de MUITOS-PARA-UM com o atributo "order" tipo "Order" da classe "OrderItemPK"
+	// Sempre que for criar uma classse auxiliar deve-se instanciar esse objeto
+	private OrderItemPK id = new OrderItemPK();
 	
 	private Integer quantity;
 	private Double price;
@@ -40,6 +44,8 @@ public class OrderItem implements Serializable {
 	// ...então, terá que ter esses GETTERS/SETTERS para os dois objetos "order" e "product" ligados ao "id" (atributos do atributo "id")
 	// ...assim retornará um objeto de cada vez [campo simples - getOrder() ], e não os dois de uma vez [campo composto - getId() ]
 	
+	// O que vale é o método - get
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
@@ -48,12 +54,12 @@ public class OrderItem implements Serializable {
 		id.setOrder(order);
 	}
 	
-	public Product getProductr() {
+	public Product getProduct() {
 		return id.getProduct();
 	}
 	
 	public void setOrdeProduct(Product product) {
-		id.setProduct  (product);
+		id.setProduct(product);
 	}
 	
 	public Integer getQuantity() {

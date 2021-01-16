@@ -2,6 +2,8 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
@@ -31,6 +34,20 @@ public class Order implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
+	
+	// Assistir aula 318 - 1:34
+	
+	// - @ManyToOne - @OneToMany
+	
+	// Os objetos mapeados por essas Annotations devem estar ligados um ao outro
+	// 		@ManyToOne: mapeia
+	// 		@OneToMany: indica qual objeto o está mapeando de acordo com o tipo do objeto (onde tenha a Annotation @ManyToOne)
+	
+	// Adição de uma coleção de objetos tipo "OrderItem"
+
+	// - mappedBy = "id.order": caminho onde há na ponta uma Annotation @ManyToOne
+	@OneToMany(mappedBy = "id.order") 
+	private Set<OrderItem> items = new HashSet<>();
 	
 	public Order() {
 	}
@@ -75,6 +92,10 @@ public class Order implements Serializable {
 
 	public void setClient(User client) {
 		this.client = client;
+	}
+	
+	public Set<OrderItem> getItems() {
+		return items;
 	}
 
 	@Override
