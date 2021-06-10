@@ -35,17 +35,6 @@ public class Order implements Serializable {
 	@JoinColumn(name = "client_id")
 	private User client;
 	
-	// Assistir aula 318 - 1:34
-	
-	// - @ManyToOne - @OneToMany
-	
-	// Os objetos mapeados por essas Annotations devem estar ligados um ao outro
-	// 		@ManyToOne: mapeia
-	// 		@OneToMany: indica qual objeto o está mapeando de acordo com o tipo do objeto (onde tenha a Annotation @ManyToOne)
-	
-	// Adição de uma coleção de objetos tipo "OrderItem"
-
-	// - mappedBy = "id.order": caminho onde há na ponta uma Annotation @ManyToOne
 	@OneToMany(mappedBy = "id.order") 
 	private Set<OrderItem> items = new HashSet<>();
 	

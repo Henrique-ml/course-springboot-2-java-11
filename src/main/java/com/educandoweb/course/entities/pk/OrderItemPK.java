@@ -1,9 +1,3 @@
-// Assistir aula 317 0:00 - 2:50
-
-// Classe auxiliar - que é a chave-primária de um objeto tipo "OrderItem"
-// Essa classe sim vai ter uma referência para objetos de classes "Product" e "Order"
-
-// - .pk: sempre que se precisar criar uma classe auxiliar para ser uma CHAVE-PRIMÁRIA COMPOSTA, coloca-se nesse pacote
 package com.educandoweb.course.entities.pk;
 
 import java.io.Serializable;
@@ -15,25 +9,15 @@ import javax.persistence.ManyToOne;
 import com.educandoweb.course.entities.Order;
 import com.educandoweb.course.entities.Product;
 
-// Essa classe não terá Construtores
-
-// Annotation do JPA
-// Por ser uma classe auxiliar de chave-primária composta oloca-se a Annotation @Embeddable
 @Embeddable
 public class OrderItemPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	// Os dois atributos "order" e "product" serão relacionamentos MUITOS-PARA-UM com "Product" e "Order"
-	
 	@ManyToOne
-	
-	// - name = : nome da chave-estrangeira na tabela do banco de dados relacional
 	@JoinColumn(name = "order_id")
 	private Order order;
 	
 	@ManyToOne
-	
-	// - name = : nome da chave-estrangeira na tabela do banco de dados relacional
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
@@ -49,6 +33,7 @@ public class OrderItemPK implements Serializable {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -58,8 +43,6 @@ public class OrderItemPK implements Serializable {
 		return result;
 	}
 	
-	// Nesse caso, para comparar um objeto "OrderItem" tem-se que comparar tanto o atributo "order" quanto o "product"...
-	// ...ou seja, porque são os dois de identificam um "OrderItem" 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

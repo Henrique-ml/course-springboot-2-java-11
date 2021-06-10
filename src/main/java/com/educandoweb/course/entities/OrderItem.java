@@ -9,18 +9,12 @@ import javax.persistence.Table;
 import com.educandoweb.course.entities.pk.OrderItemPK;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-// Mapemanto JPA
 @Entity
 @Table(name = "tb_order_item")
 public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L; 
 
-	// Atributo identificador - que é o correspondente da chave-primária composta
-	// Não colocar a Annotation @Id, por ser um id composto. Então nesse caso coloca-se a Annotation @EmbeddedId
 	@EmbeddedId
-	
-	// Esse atributo "id" vai ter uma associação de MUITOS-PARA-UM com o atributo "order" tipo "Order" da classe "OrderItemPK"
-	// Sempre que for criar uma classse auxiliar deve-se instanciar esse objeto
 	private OrderItemPK id = new OrderItemPK();
 	
 	private Integer quantity;
@@ -29,7 +23,6 @@ public class OrderItem implements Serializable {
 	public OrderItem() {
 	}
 
-	// O Construtor também irá receber como argumento um objeto tipo "Order" e "Product"
 	public OrderItem(Order order, Product product, Integer quantity, Double price) {
 		super();
 		id.setOrder(order);
@@ -38,13 +31,6 @@ public class OrderItem implements Serializable {
 		this.price = price;
 	}
 
-	// Fazer os GETTERS/SETTERS dos objetos "order" e "product"...
-	// ...embora não tenha diretamente esses objetos como atributos, tenho somente o atributo "id"...
-	// ...para as outras classes um objeto tipo "OrderItem" não tem os métodos - getId() / -setId()...
-	// ...então, terá que ter esses GETTERS/SETTERS para os dois objetos "order" e "product" ligados ao "id" (atributos do atributo "id")
-	// ...assim retornará um objeto de cada vez [campo simples - getOrder() ], e não os dois de uma vez [campo composto - getId() ]
-	
-	// O que vale é o método - get
 	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
@@ -86,7 +72,6 @@ public class OrderItem implements Serializable {
 		return result;
 	}
 
-/// Somente o atributo "id", pois é ele que identifica um objeto tipo "OrderItem" 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
