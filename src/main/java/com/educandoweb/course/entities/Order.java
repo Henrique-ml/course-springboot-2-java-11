@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
@@ -37,6 +39,15 @@ public class Order implements Serializable {
 	
 	@OneToMany(mappedBy = "id.order") 
 	private Set<OrderItem> items = new HashSet<>();
+	
+	// Mapeamento relacional
+	
+	// Só que no caso do mapeamento Um-para-Um, existe uma peculiaridade, temos que adicionar mais um atributo
+	
+	// - cascade = CascadeType.ALL: neste caso de relação Um-para-Um, estamos as duas entidades com o mesmo ID...
+	// ... e para terem o mesmo ID, é obrigatório adicionarmos este atributo
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	private Payment payment;
 	
 	public Order() {
 	}
@@ -83,6 +94,14 @@ public class Order implements Serializable {
 		this.client = client;
 	}
 	
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+
 	public Set<OrderItem> getItems() {
 		return items;
 	}
