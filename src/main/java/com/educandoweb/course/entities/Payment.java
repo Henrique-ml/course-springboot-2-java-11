@@ -11,6 +11,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tb_payment")
 public class Payment implements Serializable {
@@ -21,10 +23,8 @@ public class Payment implements Serializable {
 	private Long id;
 	private Instant moment;
 	
-	// @OneToOne - Relacionamento Um-para-Um
-	
-	// O objeto "Order" é independente e o objeto "Payment" é dependente...
-	// ... pois o objeto "Order" pode ter 0 ou 1 objeto "Payment", mas já o objeto "Payment" necessariamente precisa ter um objeto "Order"
+	// Evitando o loop infinito em nosso objeto JSON ao consultar um objeto "Order" (Postman ou Navegador)
+	@JsonIgnore
 	@OneToOne
 	@MapsId
 	private Order order;
@@ -38,8 +38,6 @@ public class Payment implements Serializable {
 		this.moment = moment;
 		this.order = order;
 	}
-
-
 
 	public Long getId() {
 		return id;

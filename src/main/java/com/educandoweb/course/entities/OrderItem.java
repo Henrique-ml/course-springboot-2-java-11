@@ -63,6 +63,14 @@ public class OrderItem implements Serializable {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+	
+	// Só que temos um detalhe: aqui nesta plataforma, a Java EE (Enterprise Edition), para este subtotal aparecer no meu objeto JSON...
+	// ... o método deve estar acompanhado pelo prefixo "get.."
+	
+	// Assim, utilizamos o padrão Java EE
+	public Double getSubTotal() {
+		return quantity * price;
+	}
 
 	@Override
 	public int hashCode() {

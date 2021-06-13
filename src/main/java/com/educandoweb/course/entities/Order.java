@@ -40,12 +40,6 @@ public class Order implements Serializable {
 	@OneToMany(mappedBy = "id.order") 
 	private Set<OrderItem> items = new HashSet<>();
 	
-	// Mapeamento relacional
-	
-	// Só que no caso do mapeamento Um-para-Um, existe uma peculiaridade, temos que adicionar mais um atributo
-	
-	// - cascade = CascadeType.ALL: neste caso de relação Um-para-Um, estamos as duas entidades com o mesmo ID...
-	// ... e para terem o mesmo ID, é obrigatório adicionarmos este atributo
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
 	
@@ -105,6 +99,18 @@ public class Order implements Serializable {
 	public Set<OrderItem> getItems() {
 		return items;
 	}
+	
+	// Nas classes de domínio "Order" e "OrderItem" serão feitos operações (métodos) para cálculo de subtotal e total...
+	// ... no qual fazem parte do nível lógico, e não conceitual
+
+	// Implementando o método que calculará o total da coleção de "OrderItem" que temos
+	public Double getTotal() {
+		double sum = 0.0;
+		for (OrderItem item : items) {
+			sum += item.getSubTotal();
+		}
+		return sum;
+	}
 
 	@Override
 	public int hashCode() {
@@ -113,7 +119,7 @@ public class Order implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
