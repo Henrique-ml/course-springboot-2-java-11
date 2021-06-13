@@ -25,8 +25,11 @@ public class UserService {
 		return obj.get();
 	}
 	
-	// Salvar um dado objeto "User" no banco de dados
 	public User insert(User obj) {
 		return repository.save(obj);
+	}
+	
+	public void delete(Long id) {
+		repository.deleteById(id);
 	}
 }
