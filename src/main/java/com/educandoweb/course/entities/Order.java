@@ -100,10 +100,6 @@ public class Order implements Serializable {
 		return items;
 	}
 	
-	// Nas classes de domínio "Order" e "OrderItem" serão feitos operações (métodos) para cálculo de subtotal e total...
-	// ... no qual fazem parte do nível lógico, e não conceitual
-
-	// Implementando o método que calculará o total da coleção de "OrderItem" que temos
 	public Double getTotal() {
 		double sum = 0.0;
 		for (OrderItem item : items) {

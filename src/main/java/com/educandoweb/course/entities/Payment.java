@@ -23,7 +23,6 @@ public class Payment implements Serializable {
 	private Long id;
 	private Instant moment;
 	
-	// Evitando o loop infinito em nosso objeto JSON ao consultar um objeto "Order" (Postman ou Navegador)
 	@JsonIgnore
 	@OneToOne
 	@MapsId
