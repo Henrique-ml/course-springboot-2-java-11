@@ -5,28 +5,6 @@ import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-// Essa é uma classe para construir um objeto personalizado com os mesmos atributos do objeto JSON lançado nas Exceções...
-// ... que podemos checar no 'Body' retornado das requisições da aplicação
-
-//Classe criada na camada de "resources" pois as Repostas das Requisições são de responsabilidade desta camada
-
-// Objeto JSON de erro retornado automaticamente na Exceção quando não encontramos o ID solicitado:
-
-//	{
-//	    "timestamp": "2021-06-13T23:39:27.631+00:00",
-//	    "status": 500,
-//	    "error": "Internal Server Error",
-//	    "message": "",
-//	    "path": "/users/1"
-//	}
-
-// Então, para que possamos fazer um Tratamento Manual (classe "ResourceExceptionHandler") das Exceções...
-// ... e retornar um objeto JSON parecido com esse acima (classe "StandardError"), estamos criando todas essas classes
-
-// - ResourceNotFoundException
-// - StandardError
-// - ResourceExceptionHandler
-
 public class StandardError implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -88,6 +66,4 @@ public class StandardError implements Serializable {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
-	// Não implementamos o hashCode() e equals() pois em momento algum não nos interessa comparar um erro com outro
 }
