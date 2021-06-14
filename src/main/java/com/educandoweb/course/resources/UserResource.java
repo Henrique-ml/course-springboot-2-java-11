@@ -31,6 +31,13 @@ public class UserResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
+	// ---- Tratamento de Exceções mais apropriado para o sistema - findById() ----
+	
+	// Quando um ID requisitado não é encontrado no banco de dados, o código de resposta de erro 500 Internal Server Error é lançado...
+	// ... não sendo o código apropriado para este tipo de erro
+	
+	// Dessa forma, trataremos melhor esta resposta de erro, utilizaremos o código 404 Not Found
+	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
 		User obj = service.findById(id);

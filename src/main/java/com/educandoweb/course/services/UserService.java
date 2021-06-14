@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repositories.UserRepository;
+import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
@@ -19,10 +20,18 @@ public class UserService {
 		return repository.findAll();
 	}
 	
+//	return obj.get();
+	
+	// O erro de código 500 é dado aqui por conta do método "get()", que lançará uma Exceção caso o objeto "obj" não conter nenhum objeto "User"...
+	// ... assim não senretornado um objeto tipo "User"
+	
+//	return obj.orElseThrow();
+	
+	// .orElseThrow(): tentará verificar se tem um objeto "User", se não, lançará uma exceção
+	
 	public User findById(Long id) {
-		
 		Optional<User> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public User insert(User obj) {
@@ -34,21 +43,12 @@ public class UserService {
 	}
 	
 	public User update(Long id, User obj) {
-		
-		// - .getOne(): instancia um objeto "User" mas sem utilizar o banco de dados, deixando este objeto monitorado pelo JPA...
-		// ... para trabalharmos com ele e só posteriormente efetuar alguma operação com o banco de dados...
-		// ... ou seja, ele só prepara o objeto
-		// Sendo melhor do que utilizarmos o método do Repository "findById()" que necessariamente vai ao bd consultar um objeto com dado ID
-		
-		// - entity: um objeto monitorado pelo JPA
 		User entity = repository.getOne(id);
 		updateData(entity, obj);
 		return repository.save(entity);
 	}
 
 	private void updateData(User entity, User obj) {
-		
-		// Nem todos os atributos do objeto "User" aceitaremos que sejam atualizados, como o ID e a senha, por exemplo
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
 		entity.setPhone(obj.getPhone());
