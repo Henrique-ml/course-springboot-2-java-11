@@ -23,7 +23,6 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(status).body(err);
 	}
 	
-	// Acrescentando um Tratamento Manual específico da Exceção personalizada que criamos, a "DatabaseException"
 	@ExceptionHandler(DatabaseException.class)
 	public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
 		String error = "Database error";
